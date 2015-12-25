@@ -5,16 +5,14 @@ import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.List;
-
 @NodeEntity
 @Data
-public class User {
+public class Session {
     @GraphId
     private Long id;
 
-    private String nickname;
+    private String sid;
 
-    @Relationship(type = "OWNS", direction = "OUTGOING")
-    private List<Session> sessions;
+    @Relationship(type = "OWNS", direction = "INGOING")
+    private User owner;
 }
