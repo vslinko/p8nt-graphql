@@ -1,8 +1,8 @@
 package ru.p8nt.graphql.repositories;
 
-import org.springframework.data.neo4j.repository.GraphRepository;
+import org.springframework.data.repository.Repository;
 import ru.p8nt.graphql.domain.Session;
 
-public interface SessionRepository extends GraphRepository<Session> {
+public interface SessionRepository extends Repository<Session, Long> {
     Session findOneBySid(String sid);
 }
