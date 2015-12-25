@@ -4,7 +4,6 @@ import graphql.Scalars;
 import graphql.schema.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.p8nt.graphql.domain.Session;
 
 @Configuration
 public class SessionTypeBuilder {
@@ -19,12 +18,6 @@ public class SessionTypeBuilder {
                 .field(GraphQLFieldDefinition.newFieldDefinition()
                         .name("owner")
                         .type(new GraphQLTypeReference("User"))
-                        .dataFetcher(new DataFetcher() {
-                            @Override
-                            public Object get(DataFetchingEnvironment dataFetchingEnvironment) {
-                                return ((Session) dataFetchingEnvironment.getSource()).getOwner();
-                            }
-                        })
                         .build())
                 .build();
     }
