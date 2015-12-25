@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class Controller {
@@ -19,7 +20,7 @@ public class Controller {
     private GraphQLSchema schema;
 
     @Autowired
-    private Context context;
+    private GraphQLRequestContext context;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public Object handleGetRequest(
