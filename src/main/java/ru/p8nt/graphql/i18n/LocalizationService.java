@@ -10,8 +10,8 @@ import java.util.Locale;
 
 @Service
 public class LocalizationService {
-    private LocaleContext localeContext;
-    private MessageSource messageSource;
+    private final LocaleContext localeContext;
+    private final MessageSource messageSource;
 
     @Autowired
     public LocalizationService(LocaleContext localeContext, MessageSource messageSource) {
@@ -19,12 +19,12 @@ public class LocalizationService {
         this.messageSource = messageSource;
     }
 
-    public Locale getLocale() {
+    public Locale getCurrentLocale() {
         return localeContext.getLocale();
     }
 
     public String getMessage(String key) {
-        return messageSource.getMessage(key, null, getLocale());
+        return messageSource.getMessage(key, null, getCurrentLocale());
     }
 
     public String getMessage(String key, List<Object> objectList) {
@@ -32,6 +32,6 @@ public class LocalizationService {
     }
 
     public String getMessage(String key, Object[] objects) {
-        return messageSource.getMessage(key, objects, getLocale());
+        return messageSource.getMessage(key, objects, getCurrentLocale());
     }
 }

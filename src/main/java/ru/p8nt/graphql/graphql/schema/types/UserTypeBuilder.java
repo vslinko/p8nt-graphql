@@ -5,29 +5,26 @@ import graphql.schema.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.context.SecurityContext;
 import ru.p8nt.graphql.domain.User;
+import ru.p8nt.graphql.security.SecurityService;
 
 import java.util.Collections;
 
 @Configuration
 public class UserTypeBuilder {
     @Autowired
-    private SecurityContext securityContext;
+    private SecurityService securityService;
 
     @Bean
     protected DataFetcher sessionsDataFetcher() {
-        return new DataFetcher() {
-            @Override
-            public Object get(DataFetchingEnvironment environment) {
-                User user = (User) environment.getSource();
+        return environment -> {
+            User user = (User) environment.getSource();
 
-                if (!user.equals(securityContext.getAuthentication().getPrincipal())) {
-                    return Collections.emptyList();
-                }
-
-                return user.getSessions();
+            if (!user.equals(securityService.getCurrentUser())) {
+                return Collections.emptyList();
             }
+
+            return user.getSessions();
         };
     }
 

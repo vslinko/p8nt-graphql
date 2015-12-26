@@ -2,7 +2,6 @@ package ru.p8nt.graphql.graphql.schema;
 
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
-import graphql.schema.GraphQLType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +22,6 @@ public class SchemaBuilder {
 
         return GraphQLSchema.newSchema()
                 .query(queryType)
-                .build(new HashSet<GraphQLType>(types.values()));
+                .build(new HashSet<>(types.values()));
     }
 }
