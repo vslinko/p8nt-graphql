@@ -11,8 +11,12 @@ import ru.p8nt.graphql.repositories.SessionRepository;
 
 @Service
 public class AuthenticationProvider implements org.springframework.security.authentication.AuthenticationProvider {
+    private final SessionRepository sessionRepository;
+
     @Autowired
-    private SessionRepository sessionRepository;
+    public AuthenticationProvider(SessionRepository sessionRepository) {
+        this.sessionRepository = sessionRepository;
+    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

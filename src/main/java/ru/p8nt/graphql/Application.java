@@ -20,6 +20,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import ru.p8nt.graphql.security.AuthenticationFilter;
 import ru.p8nt.graphql.security.AuthenticationProvider;
@@ -39,6 +40,9 @@ public class Application {
         @Autowired
         private AuthenticationProvider authenticationProvider;
 
+        @Autowired
+        private SecurityContext securityContext;
+
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
             auth.authenticationProvider(authenticationProvider);
@@ -46,7 +50,7 @@ public class Application {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.addFilterBefore(new AuthenticationFilter(authenticationManager()), BasicAuthenticationFilter.class);
+            http.addFilterBefore(new AuthenticationFilter(authenticationManager(), securityContext), BasicAuthenticationFilter.class);
             http.csrf().disable();
             http.logout().disable();
             http.sessionManagement().disable();

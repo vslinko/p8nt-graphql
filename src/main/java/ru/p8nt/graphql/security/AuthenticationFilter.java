@@ -3,7 +3,7 @@ package ru.p8nt.graphql.security;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -16,9 +16,11 @@ import java.io.IOException;
 
 public class AuthenticationFilter extends GenericFilterBean {
     private final AuthenticationManager authenticationManager;
+    private final SecurityContext securityContext;
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager) {
+    public AuthenticationFilter(AuthenticationManager authenticationManager, SecurityContext securityContext) {
         this.authenticationManager = authenticationManager;
+        this.securityContext = securityContext;
     }
 
     @Override
@@ -33,7 +35,7 @@ public class AuthenticationFilter extends GenericFilterBean {
 
             try {
                 Authentication auth = authenticationManager.authenticate(new BearerAuthenticationToken(token));
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                securityContext.setAuthentication(auth);
                 filterChain.doFilter(servletRequest, servletResponse);
             } catch (AuthenticationException e) {
                 httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
