@@ -55,7 +55,7 @@ public class Controller {
         Map<String, Object> variablesMap;
 
         if (variables == null) {
-            variablesMap = new HashMap<String, Object>();
+            variablesMap = new HashMap<>();
         } else {
             try {
                 ObjectMapper mapper = new ObjectMapper();

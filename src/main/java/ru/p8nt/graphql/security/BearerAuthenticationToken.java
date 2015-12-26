@@ -2,8 +2,8 @@ package ru.p8nt.graphql.security;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
-public class BearerAuthenticationToken extends AbstractAuthenticationToken {
-    private String token;
+class BearerAuthenticationToken extends AbstractAuthenticationToken {
+    private final String token;
 
     public BearerAuthenticationToken(String token) {
         super(null);

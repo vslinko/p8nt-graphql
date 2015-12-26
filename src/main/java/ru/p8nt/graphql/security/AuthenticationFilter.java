@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AuthenticationFilter extends GenericFilterBean {
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     public AuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;

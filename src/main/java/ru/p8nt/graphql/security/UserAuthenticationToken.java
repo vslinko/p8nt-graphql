@@ -4,9 +4,9 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import ru.p8nt.graphql.domain.Session;
 import ru.p8nt.graphql.domain.User;
 
-public class UserAuthenticationToken extends AbstractAuthenticationToken {
-    private User principal;
-    private Session credentials;
+class UserAuthenticationToken extends AbstractAuthenticationToken {
+    private final User principal;
+    private final Session credentials;
 
     public UserAuthenticationToken(User user, Session session) {
         super(user.getAuthorities());
