@@ -19,9 +19,6 @@ public class Controller {
     @Autowired
     private GraphQLSchema schema;
 
-    @Autowired
-    private GraphQLRequestContext context;
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public Object handleGetRequest(
             @RequestParam(name = "query", required = false) String query,
@@ -70,6 +67,6 @@ public class Controller {
     }
 
     private Object processRequest(String query, String operationName, Map<String, Object> variables) {
-        return new GraphQL(schema).execute(query, operationName, context, variables);
+        return new GraphQL(schema).execute(query, operationName, null, variables);
     }
 }
