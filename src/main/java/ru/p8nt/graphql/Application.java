@@ -1,11 +1,16 @@
 package ru.p8nt.graphql;
 
+import lombok.Setter;
 import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.server.Neo4jServer;
@@ -21,6 +26,11 @@ import ru.p8nt.graphql.security.AuthenticationProvider;
 
 @SpringBootApplication
 @EnableNeo4jRepositories
+@EnableConfigurationProperties
+@PropertySources({
+        @PropertySource(value = "classpath:p8nt.properties"),
+        @PropertySource(value = "file:p8nt.properties", ignoreResourceNotFound = true)
+})
 public class Application {
 
     @EnableWebSecurity
@@ -44,11 +54,15 @@ public class Application {
     }
 
     @Configuration
+    @ConfigurationProperties(prefix = "neo4j")
     public static class Neo4JApplicationConfiguration extends Neo4jConfiguration {
+        @Setter
+        private String url;
+
         @Bean
         @Override
         public Neo4jServer neo4jServer() {
-            return new RemoteServer("http://localhost:7474");
+            return new RemoteServer(url);
         }
 
         @Bean

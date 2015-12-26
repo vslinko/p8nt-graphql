@@ -55,6 +55,12 @@
             <artifactId>lombok</artifactId>
             <version>1.16.6</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-ogm</artifactId>
+            <version>1.1.3</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -82,6 +88,14 @@
             <id>bintray-andimarek-graphql-java</id>
             <name>bintray</name>
             <url>http://dl.bintray.com/andimarek/graphql-java</url>
+        </repository>
+
+        <repository>
+            <id>neo4j-snapshots</id>
+            <url>http://m2.neo4j.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
     </repositories>
 
