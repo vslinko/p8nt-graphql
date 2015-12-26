@@ -22,6 +22,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import ru.p8nt.graphql.security.AuthenticationFilter;
 import ru.p8nt.graphql.security.AuthenticationProvider;
 
@@ -73,6 +76,14 @@ public class Application {
         @Override
         public SessionFactory getSessionFactory() {
             return new SessionFactory("ru.p8nt.graphql.domain");
+        }
+    }
+
+    @Configuration
+    public static class WebMvcConfiguration extends WebMvcConfigurerAdapter {
+        @Bean
+        public LocaleResolver localeResolver() {
+            return new AcceptHeaderLocaleResolver();
         }
     }
 
