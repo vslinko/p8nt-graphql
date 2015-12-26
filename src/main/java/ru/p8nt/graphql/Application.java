@@ -68,7 +68,7 @@ public class Application {
         @Bean
         @Override
         public SessionFactory getSessionFactory() {
-            return new SessionFactory("ru.p8nt.graphql");
+            return new SessionFactory("ru.p8nt.graphql.domain");
         }
     }
 
