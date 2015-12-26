@@ -5,7 +5,7 @@ import ru.p8nt.graphql.domain.User;
 
 import java.util.List;
 
-@SuppressWarnings("unused")
+@org.springframework.stereotype.Repository
 public interface UserRepository extends Repository<User, Long> {
     List<User> findAll();
 }
