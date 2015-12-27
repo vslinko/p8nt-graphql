@@ -1,35 +1,13 @@
 package ru.p8nt.graphql.graphql;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import ru.p8nt.graphql.Application;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@IntegrationTest
-@WebAppConfiguration
-@ContextConfiguration(classes = {Application.class})
-public class ControllerTest extends AbstractTestNGSpringContextTests {
-    @Autowired
-    private Controller controller;
-
-    private MockMvc mvc;
-
-    @BeforeMethod
-    public void setUp() {
-        mvc = MockMvcBuilders.standaloneSetup(controller).build();
-    }
-
+public class ControllerTest extends GraphQLTest {
     @Test
     public void testGetRequest() throws Exception {
         mvc.perform(get("/").param("query", "query q($name: String!) {hello(name: $name)}").param("variables", "{\"name\":\"John\"}"))
