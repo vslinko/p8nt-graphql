@@ -48,7 +48,7 @@ public class Controller {
 
     private Object processRequest(String query, String operationName, String variables) {
         if (query == null) {
-            return formatErrorResponse(HttpStatus.BAD_REQUEST, "Must provide query string.");
+            return formatBadRequestErrorResponse("Must provide query string.");
         }
 
         Map<String, Object> variablesMap;
@@ -61,7 +61,7 @@ public class Controller {
                 MapType type = TypeFactory.defaultInstance().constructMapType(Map.class, String.class, Object.class);
                 variablesMap = mapper.readValue(variables, type);
             } catch (IOException e) {
-                return formatErrorResponse(HttpStatus.BAD_REQUEST, "Variables are invalid JSON.");
+                return formatBadRequestErrorResponse("Variables are invalid JSON.");
             }
         }
 
@@ -72,13 +72,13 @@ public class Controller {
         return new GraphQL(schema).execute(query, operationName, null, variables);
     }
 
-    private Object formatErrorResponse(HttpStatus status, String message) {
+    private Object formatBadRequestErrorResponse(String message) {
         HashMap<String, Object> responseError = new HashMap<>();
         responseError.put("message", message);
 
         HashMap<String, Object> responseBody = new HashMap<>();
         responseBody.put("errors", Collections.singletonList(responseError));
 
-        return new ResponseEntity<>(responseBody, status);
+        return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
     }
 }

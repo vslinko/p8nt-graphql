@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @Service
 public class RelayService {
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
 
     @Autowired
     public RelayService(ApplicationContext applicationContext) {

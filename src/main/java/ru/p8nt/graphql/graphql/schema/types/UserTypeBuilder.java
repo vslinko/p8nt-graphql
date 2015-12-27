@@ -1,6 +1,5 @@
 package ru.p8nt.graphql.graphql.schema.types;
 
-import graphql.Scalars;
 import graphql.schema.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,6 +11,9 @@ import ru.p8nt.graphql.security.SecurityService;
 
 import java.util.Collections;
 
+import static graphql.Scalars.GraphQLString;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLObjectType.newObject;
 import static ru.p8nt.graphql.graphql.relay.RelayUtils.idField;
 
 @Configuration
@@ -38,17 +40,17 @@ public class UserTypeBuilder {
 
     @Bean(name = "userType")
     public GraphQLObjectType build() {
-        return GraphQLObjectType.newObject()
+        return newObject()
                 .name(NodeType.USER.getName())
                 .withInterface(nodeInterface)
                 .field(idField(NodeType.USER))
-                .field(GraphQLFieldDefinition.newFieldDefinition()
+                .field(newFieldDefinition()
                         .name("nickname")
-                        .type(Scalars.GraphQLString)
+                        .type(GraphQLString)
                         .build())
-                .field(GraphQLFieldDefinition.newFieldDefinition()
+                .field(newFieldDefinition()
                         .name("sessions")
-                        .type(new GraphQLList(NodeType.SESSION.getGraphQLTypeReference()))
+                        .type(new GraphQLList(new GraphQLNonNull(NodeType.SESSION.getGraphQLTypeReference())))
                         .dataFetcher(sessionsDataFetcher())
                         .build())
                 .build();

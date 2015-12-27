@@ -21,8 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {Application.class})
 public class GraphQLTest extends AbstractTestNGSpringContextTests {
     public static class QueryBuilder {
-        private MockHttpServletRequestBuilder requestBuilder;
-        private MockMvc mvc;
+        private final MockHttpServletRequestBuilder requestBuilder;
+        private final MockMvc mvc;
 
         public QueryBuilder(MockHttpServletRequestBuilder requestBuilder, MockMvc mvc) {
             this.requestBuilder = requestBuilder;
@@ -45,10 +45,11 @@ public class GraphQLTest extends AbstractTestNGSpringContextTests {
     @Autowired
     private Controller controller;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private FilterChainProxy springSecurityFilterChain;
 
-    protected MockMvc mvc;
+    MockMvc mvc;
 
     @BeforeMethod
     public void setUp() {

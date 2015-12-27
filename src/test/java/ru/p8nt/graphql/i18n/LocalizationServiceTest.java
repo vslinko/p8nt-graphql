@@ -14,7 +14,6 @@ import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 
 public class LocalizationServiceTest {
-    private LocaleContext localeContext;
     private MessageSource messageSource;
     private Locale locale;
 
@@ -22,7 +21,7 @@ public class LocalizationServiceTest {
 
     @BeforeMethod
     public void setUp() {
-        localeContext = mock(LocaleContext.class);
+        LocaleContext localeContext = mock(LocaleContext.class);
         messageSource = mock(MessageSource.class);
 
         localizationService = new LocalizationService(localeContext, messageSource);

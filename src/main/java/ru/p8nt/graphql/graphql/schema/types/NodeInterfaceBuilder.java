@@ -1,13 +1,15 @@
 package ru.p8nt.graphql.graphql.schema.types;
 
-import graphql.Scalars;
-import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLInterfaceType;
 import graphql.schema.GraphQLNonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.p8nt.graphql.graphql.relay.RelayService;
+
+import static graphql.Scalars.GraphQLID;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLInterfaceType.newInterface;
 
 @Configuration
 public class NodeInterfaceBuilder {
@@ -16,11 +18,11 @@ public class NodeInterfaceBuilder {
 
     @Bean(name = "nodeInterface")
     public GraphQLInterfaceType build() {
-        return GraphQLInterfaceType.newInterface()
+        return newInterface()
                 .name("Node")
-                .field(GraphQLFieldDefinition.newFieldDefinition()
+                .field(newFieldDefinition()
                         .name("id")
-                        .type(new GraphQLNonNull(Scalars.GraphQLID))
+                        .type(new GraphQLNonNull(GraphQLID))
                         .build())
                 .typeResolver(object -> relayService.getGraphQLObjectTypeByObject(object))
                 .build();

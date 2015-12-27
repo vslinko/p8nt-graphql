@@ -1,6 +1,5 @@
 package ru.p8nt.graphql.graphql.schema.types;
 
-import graphql.Scalars;
 import graphql.schema.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,6 +10,12 @@ import ru.p8nt.graphql.graphql.relay.RelayService;
 import ru.p8nt.graphql.i18n.LocalizationService;
 
 import java.util.Collections;
+
+import static graphql.Scalars.GraphQLID;
+import static graphql.Scalars.GraphQLString;
+import static graphql.schema.GraphQLArgument.newArgument;
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLObjectType.newObject;
 
 @Configuration
 public class QueryTypeBuilder {
@@ -44,32 +49,31 @@ public class QueryTypeBuilder {
 
     @Bean(name = "queryType")
     public GraphQLObjectType build() {
-        return GraphQLObjectType.newObject()
+        return newObject()
                 .name("Query")
-                .field(GraphQLFieldDefinition.newFieldDefinition()
+                .field(newFieldDefinition()
                         .name("hello")
-                        .type(Scalars.GraphQLString)
-                        .argument(GraphQLArgument.newArgument()
+                        .type(new GraphQLNonNull(GraphQLString))
+                        .argument(newArgument()
                                 .name("name")
-                                .type(Scalars.GraphQLString)
+                                .type(GraphQLString)
                                 .build())
                         .dataFetcher(helloDataFetcher())
                         .build())
-                .field(GraphQLFieldDefinition.newFieldDefinition()
+                .field(newFieldDefinition()
                         .name("node")
                         .type(nodeInterface)
-                        .argument(GraphQLArgument.newArgument()
+                        .argument(newArgument()
                                 .name("id")
-                                .type(new GraphQLNonNull(Scalars.GraphQLID))
+                                .type(new GraphQLNonNull(GraphQLID))
                                 .build())
                         .dataFetcher(nodeDataFetcher())
                         .build())
-                .field(GraphQLFieldDefinition.newFieldDefinition()
+                .field(newFieldDefinition()
                         .name("viewer")
                         .type(new GraphQLTypeReference("Viewer"))
                         .dataFetcher(environment -> new Object())
                         .build())
                 .build();
-
     }
 }

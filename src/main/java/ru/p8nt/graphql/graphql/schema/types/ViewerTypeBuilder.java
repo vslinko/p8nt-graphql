@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import ru.p8nt.graphql.repositories.UserRepository;
 import ru.p8nt.graphql.security.SecurityService;
 
+import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLObjectType.newObject;
+
 @Configuration
 public class ViewerTypeBuilder {
     @Autowired
@@ -26,11 +29,11 @@ public class ViewerTypeBuilder {
 
     @Bean(name = "viewerType")
     public GraphQLObjectType build() {
-        return GraphQLObjectType.newObject()
+        return newObject()
                 .name("Viewer")
-                .field(GraphQLFieldDefinition.newFieldDefinition()
+                .field(newFieldDefinition()
                         .name("users")
-                        .type(new GraphQLList(new GraphQLTypeReference("User")))
+                        .type(new GraphQLList(new GraphQLNonNull(new GraphQLTypeReference("User"))))
                         .dataFetcher(usersDataFetcher())
                         .build())
                 .build();

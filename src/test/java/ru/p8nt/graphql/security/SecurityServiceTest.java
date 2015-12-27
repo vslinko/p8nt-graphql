@@ -17,12 +17,12 @@ import static org.mockito.Mockito.when;
 import static org.testng.Assert.*;
 
 public class SecurityServiceTest {
-    SecurityContext securityContext;
-    UserAuthenticationToken authentication;
-    User user;
-    Session session;
+    private SecurityContext securityContext;
+    private UserAuthenticationToken authentication;
+    private User user;
+    private Session session;
 
-    SecurityService securityService;
+    private SecurityService securityService;
 
     @BeforeMethod
     public void setUp() {
