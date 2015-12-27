@@ -1,17 +1,17 @@
 package ru.p8nt.graphql.graphql.schema.types;
 
-import graphql.schema.*;
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLNonNull;
+import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLTypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.p8nt.graphql.graphql.relay.GlobalId;
 import ru.p8nt.graphql.graphql.relay.RelayService;
 import ru.p8nt.graphql.i18n.LocalizationService;
 
 import java.util.Collections;
 
-import static graphql.Scalars.GraphQLID;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLArgument.newArgument;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
@@ -25,10 +25,6 @@ public class QueryTypeBuilder {
     @Autowired
     private LocalizationService localizationService;
 
-    @Autowired
-    @Qualifier("nodeInterface")
-    private GraphQLInterfaceType nodeInterface;
-
     @Bean
     protected DataFetcher helloDataFetcher() {
         return environment -> {
@@ -40,11 +36,6 @@ public class QueryTypeBuilder {
 
             return localizationService.getMessage("hello", Collections.singletonList(name));
         };
-    }
-
-    @Bean
-    protected DataFetcher nodeDataFetcher() {
-        return environment -> relayService.getNodeByGlobalId(new GlobalId(environment.getArgument("id")));
     }
 
     @Bean(name = "queryType")
@@ -60,15 +51,7 @@ public class QueryTypeBuilder {
                                 .build())
                         .dataFetcher(helloDataFetcher())
                         .build())
-                .field(newFieldDefinition()
-                        .name("node")
-                        .type(nodeInterface)
-                        .argument(newArgument()
-                                .name("id")
-                                .type(new GraphQLNonNull(GraphQLID))
-                                .build())
-                        .dataFetcher(nodeDataFetcher())
-                        .build())
+                .field(relayService.nodeField())
                 .field(newFieldDefinition()
                         .name("viewer")
                         .type(new GraphQLTypeReference("Viewer"))

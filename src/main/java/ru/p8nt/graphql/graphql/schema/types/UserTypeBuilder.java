@@ -1,12 +1,14 @@
 package ru.p8nt.graphql.graphql.schema.types;
 
-import graphql.schema.*;
+import graphql.schema.DataFetcher;
+import graphql.schema.GraphQLList;
+import graphql.schema.GraphQLNonNull;
+import graphql.schema.GraphQLObjectType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.p8nt.graphql.domain.User;
-import ru.p8nt.graphql.graphql.relay.NodeType;
+import ru.p8nt.graphql.graphql.relay.RelayService;
 import ru.p8nt.graphql.security.SecurityService;
 
 import java.util.Collections;
@@ -14,7 +16,8 @@ import java.util.Collections;
 import static graphql.Scalars.GraphQLString;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLObjectType.newObject;
-import static ru.p8nt.graphql.graphql.relay.RelayUtils.idField;
+import static ru.p8nt.graphql.graphql.relay.RelayService.NodeMeta.SESSION_NODE;
+import static ru.p8nt.graphql.graphql.relay.RelayService.NodeMeta.USER_NODE;
 
 @Configuration
 public class UserTypeBuilder {
@@ -22,8 +25,7 @@ public class UserTypeBuilder {
     private SecurityService securityService;
 
     @Autowired
-    @Qualifier("nodeInterface")
-    private GraphQLInterfaceType nodeInterface;
+    private RelayService relayService;
 
     @Bean
     protected DataFetcher sessionsDataFetcher() {
@@ -41,16 +43,16 @@ public class UserTypeBuilder {
     @Bean(name = "userType")
     public GraphQLObjectType build() {
         return newObject()
-                .name(NodeType.USER.getName())
-                .withInterface(nodeInterface)
-                .field(idField(NodeType.USER))
+                .name(USER_NODE.name)
+                .withInterface(relayService.nodeInterface())
+                .field(relayService.idField(USER_NODE))
                 .field(newFieldDefinition()
                         .name("nickname")
                         .type(GraphQLString)
                         .build())
                 .field(newFieldDefinition()
                         .name("sessions")
-                        .type(new GraphQLList(new GraphQLNonNull(NodeType.SESSION.getGraphQLTypeReference())))
+                        .type(new GraphQLList(new GraphQLNonNull(SESSION_NODE.reference)))
                         .dataFetcher(sessionsDataFetcher())
                         .build())
                 .build();
