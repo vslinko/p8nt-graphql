@@ -1,15 +1,12 @@
 package ru.p8nt.graphql.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 @NodeEntity
-@ToString
+@ToString(exclude = {"owner"})
 @EqualsAndHashCode(of = {"id"})
 public class Session {
     @GraphId
