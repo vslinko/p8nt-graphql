@@ -7,10 +7,12 @@ import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +30,7 @@ public class Controller {
         return processRequest(query, operationName, variables);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = {"application/x-www-form-urlencoded"})
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
     public Object handleFormRequest(
             @RequestParam(name = "query", required = false) String query,
             @RequestParam(name = "operationName", required = false) String operationName,
@@ -37,7 +39,7 @@ public class Controller {
         return processRequest(query, operationName, variables);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = {"application/json"})
+    @RequestMapping(value = "/", method = RequestMethod.POST, consumes = {MediaType.APPLICATION_JSON_VALUE})
     public Object handleJsonRequest(
             @RequestBody Map<String, String> body
     ) {
@@ -46,7 +48,7 @@ public class Controller {
 
     private Object processRequest(String query, String operationName, String variables) {
         if (query == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Must provide query string.");
+            return formatErrorResponse(HttpStatus.BAD_REQUEST, "Must provide query string.");
         }
 
         Map<String, Object> variablesMap;
@@ -59,7 +61,7 @@ public class Controller {
                 MapType type = TypeFactory.defaultInstance().constructMapType(Map.class, String.class, Object.class);
                 variablesMap = mapper.readValue(variables, type);
             } catch (IOException e) {
-                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Variables are invalid JSON.");
+                return formatErrorResponse(HttpStatus.BAD_REQUEST, "Variables are invalid JSON.");
             }
         }
 
@@ -68,5 +70,15 @@ public class Controller {
 
     private Object processRequest(String query, String operationName, Map<String, Object> variables) {
         return new GraphQL(schema).execute(query, operationName, null, variables);
+    }
+
+    private Object formatErrorResponse(HttpStatus status, String message) {
+        HashMap<String, Object> responseError = new HashMap<>();
+        responseError.put("message", message);
+
+        HashMap<String, Object> responseBody = new HashMap<>();
+        responseBody.put("errors", Collections.singletonList(responseError));
+
+        return new ResponseEntity<>(responseBody, status);
     }
 }
