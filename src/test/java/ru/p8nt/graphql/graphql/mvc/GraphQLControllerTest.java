@@ -1,13 +1,14 @@
-package ru.p8nt.graphql.graphql;
+package ru.p8nt.graphql.graphql.mvc;
 
 import org.springframework.http.MediaType;
 import org.testng.annotations.Test;
+import ru.p8nt.graphql.graphql.GraphQLIntegrationTestContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class ControllerTest extends GraphQLTest {
+public class GraphQLControllerTest extends GraphQLIntegrationTestContext {
     @Test
     public void testGetRequest() throws Exception {
         mvc.perform(get("/").param("query", "query q($name: String!) {hello(name: $name)}").param("variables", "{\"name\":\"John\"}"))

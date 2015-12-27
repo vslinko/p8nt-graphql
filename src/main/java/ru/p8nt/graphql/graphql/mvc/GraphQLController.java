@@ -1,4 +1,4 @@
-package ru.p8nt.graphql.graphql;
+package ru.p8nt.graphql.graphql.mvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class Controller {
+public class GraphQLController {
     @Autowired
     private GraphQLSchema schema;
 

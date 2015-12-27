@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.testng.annotations.BeforeMethod;
 import ru.p8nt.graphql.Application;
+import ru.p8nt.graphql.graphql.mvc.GraphQLController;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @WebAppConfiguration
 @ContextConfiguration(classes = {Application.class})
-public class GraphQLTest extends AbstractTestNGSpringContextTests {
+public class GraphQLIntegrationTestContext extends AbstractTestNGSpringContextTests {
     public static class QueryBuilder {
         private final MockHttpServletRequestBuilder requestBuilder;
         private final MockMvc mvc;
@@ -43,13 +44,13 @@ public class GraphQLTest extends AbstractTestNGSpringContextTests {
     }
 
     @Autowired
-    private Controller controller;
+    private GraphQLController controller;
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private FilterChainProxy springSecurityFilterChain;
 
-    MockMvc mvc;
+    protected MockMvc mvc;
 
     @BeforeMethod
     public void setUp() {
