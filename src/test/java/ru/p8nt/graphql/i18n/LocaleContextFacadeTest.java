@@ -20,6 +20,6 @@ public class LocaleContextFacadeTest {
     public void testLocaleGetter() {
         LocaleContextHolder.setLocale(new Locale("zh_CN"));
 
-        assertEquals("zh_cn", localeContext.getLocale().getLanguage());
+        assertEquals(localeContext.getLocale().getLanguage(), "zh_cn");
     }
 }

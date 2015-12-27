@@ -68,7 +68,7 @@ public class SecurityServiceTest {
     public void testCurrentUserGetter() {
         when(securityContext.getAuthentication()).thenReturn(authentication);
 
-        assertEquals(user, securityService.getCurrentUser());
+        assertEquals(securityService.getCurrentUser(), user);
 
         when(securityContext.getAuthentication()).thenReturn(null);
 
@@ -83,7 +83,7 @@ public class SecurityServiceTest {
     public void testCurrentSessionGetter() {
         when(securityContext.getAuthentication()).thenReturn(authentication);
 
-        assertEquals(session, securityService.getCurrentSession());
+        assertEquals(securityService.getCurrentSession(), session);
 
         when(securityContext.getAuthentication()).thenReturn(null);
 

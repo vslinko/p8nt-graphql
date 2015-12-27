@@ -69,7 +69,7 @@ public class AuthenticationFilterTest {
 
         ArgumentCaptor<BearerAuthenticationToken> argument = ArgumentCaptor.forClass(BearerAuthenticationToken.class);
         verify(authenticationManager).authenticate(argument.capture());
-        assertEquals("token", argument.getValue().getCredentials());
+        assertEquals(argument.getValue().getCredentials(), "token");
         assertNull(argument.getValue().getPrincipal());
 
         verify(securityContext).setAuthentication(authentication);

@@ -33,7 +33,7 @@ public class LocalizationServiceTest {
 
     @Test
     public void testLocaleGetter() {
-        assertEquals("zh_cn", localizationService.getCurrentLocale().getLanguage());
+        assertEquals(localizationService.getCurrentLocale().getLanguage(), "zh_cn");
     }
 
     @Test
@@ -45,8 +45,8 @@ public class LocalizationServiceTest {
         when(messageSource.getMessage("message2", objects, locale)).thenReturn("Message #2");
         when(messageSource.getMessage("message3", objects, locale)).thenReturn("Message #3");
 
-        assertEquals("Message #1", localizationService.getMessage("message1"));
-        assertEquals("Message #2", localizationService.getMessage("message2", objectList));
-        assertEquals("Message #3", localizationService.getMessage("message3", objects));
+        assertEquals(localizationService.getMessage("message1"), "Message #1");
+        assertEquals(localizationService.getMessage("message2", objectList), "Message #2");
+        assertEquals(localizationService.getMessage("message3", objects), "Message #3");
     }
 }

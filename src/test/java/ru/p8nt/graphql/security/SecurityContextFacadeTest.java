@@ -16,9 +16,9 @@ public class SecurityContextFacadeTest {
         SecurityContextFacade contextFacade = new SecurityContextFacade();
 
         contextFacade.setAuthentication(authentication1);
-        assertEquals(authentication1, SecurityContextHolder.getContext().getAuthentication());
+        assertEquals(SecurityContextHolder.getContext().getAuthentication(), authentication1);
 
         SecurityContextHolder.getContext().setAuthentication(authentication2);
-        assertEquals(authentication2, contextFacade.getAuthentication());
+        assertEquals(contextFacade.getAuthentication(), authentication2);
     }
 }

@@ -39,9 +39,9 @@ public class AuthenticationProviderTest {
 
         Authentication token = authenticationProvider.authenticate(bearerAuthenticationToken);
 
-        assertEquals(session, token.getCredentials());
-        assertEquals(user, token.getPrincipal());
-        assertEquals(user.getAuthorities(), token.getAuthorities());
+        assertEquals(token.getCredentials(), session);
+        assertEquals(token.getPrincipal(), user);
+        assertEquals(token.getAuthorities(), user.getAuthorities());
     }
 
     @Test(expectedExceptions = BadCredentialsException.class, expectedExceptionsMessageRegExp = "Token is invalid")
