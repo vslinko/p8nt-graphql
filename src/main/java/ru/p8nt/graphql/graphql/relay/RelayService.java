@@ -11,6 +11,10 @@ import ru.p8nt.graphql.domain.Session;
 import ru.p8nt.graphql.domain.User;
 import ru.p8nt.graphql.repositories.NodeRepository;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
 import static graphql.Scalars.GraphQLID;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 
@@ -60,6 +64,9 @@ public class RelayService {
     private final GraphQLInterfaceType nodeInterface;
     private final GraphQLFieldDefinition nodeField;
 
+    private HashMap<NodeMeta, GraphQLObjectType> edgeTypes = new HashMap<>();
+    private HashMap<NodeMeta, GraphQLObjectType> connectionTypes = new HashMap<>();
+
     @Autowired
     public RelayService(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
@@ -77,6 +84,26 @@ public class RelayService {
         return nodeField;
     }
 
+    public GraphQLObjectType edgeType(NodeMeta type) {
+        if (!edgeTypes.containsKey(type)) {
+            edgeTypes.put(type, relay.edgeType(type.name, getGraphQLObjectType(type), nodeInterface, Collections.emptyList()));
+        }
+
+        return edgeTypes.get(type);
+    }
+
+    public GraphQLObjectType connectionType(NodeMeta type) {
+        if (!connectionTypes.containsKey(type)) {
+            connectionTypes.put(type, relay.connectionType(type.name, edgeType(type), Collections.emptyList()));
+        }
+
+        return connectionTypes.get(type);
+    }
+
+    public List<GraphQLArgument> connectionFieldArguments() {
+        return relay.getConnectionFieldArguments();
+    }
+
     public GraphQLFieldDefinition idField(NodeMeta type) {
         return newFieldDefinition()
                 .name("id")
@@ -86,9 +113,7 @@ public class RelayService {
     }
 
     private GraphQLObjectType nodeInterfaceTypeResolver(Object object) {
-        NodeMeta type = NodeMeta.getByObject(object);
-
-        return (GraphQLObjectType) applicationContext.getBean(type.typeBeanName);
+        return getGraphQLObjectType(NodeMeta.getByObject(object));
     }
 
     private Node nodeFieldDataFetcher(DataFetchingEnvironment environment) {
@@ -99,5 +124,9 @@ public class RelayService {
         NodeRepository repository = (NodeRepository) applicationContext.getBean(type.repositoryBeanName);
 
         return repository.findOne(Long.parseLong(resolvedGlobalId.id));
+    }
+
+    private GraphQLObjectType getGraphQLObjectType(NodeMeta type) {
+        return (GraphQLObjectType) applicationContext.getBean(type.typeBeanName);
     }
 }
