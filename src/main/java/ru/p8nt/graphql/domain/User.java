@@ -18,7 +18,7 @@ import java.util.List;
 @NodeEntity
 @ToString(exclude = {"sessions"})
 @EqualsAndHashCode(of = {"id"})
-public class User implements UserDetails {
+public class User implements Node, UserDetails {
     @GraphId
     @Getter
     @Setter

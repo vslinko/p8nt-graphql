@@ -11,7 +11,7 @@ import org.neo4j.ogm.annotation.Relationship;
 @NodeEntity
 @ToString(exclude = {"owner"})
 @EqualsAndHashCode(of = {"id"})
-public class Session {
+public class Session implements Node {
     @GraphId
     @Getter
     @Setter
